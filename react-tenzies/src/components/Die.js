@@ -3,10 +3,11 @@ function Die(props) {
 
     return (
         <div className="die-container" 
-             onClick={(event) => props.checkIfSelectedNumber(props.id, event)}>
-                 
+             onClick={(event) =>(
+                props.checkIfSelectedNumber(props.id, event)
+            )}
+        >        
             {props.value}
-
         </div>
     );
 }

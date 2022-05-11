@@ -50,26 +50,18 @@ function App() {
     a new *value* with generateRandomNumber()
     */
     const generateNewArrayOfDice = () =>{
-        setArrayOfDice(prevArrayOfDice =>{
-            let newArray = []
-            const length = prevArrayOfDice.length
-            for(let i = 0 ; i < length; i++){
-                const die = prevArrayOfDice[i]
-                if(die.selected){
-                    newArray.push(die)
-                }else if(die.selected === false){
-                    newArray.push(
-                        {
-                            id: die.id, 
-                            selected: die.selected, 
-                            value: generateRandomNumber().toString()
-                        }
-                    )
-                }
-            }
-            removeAllWrongDieStyling()
-            return newArray
-        })
+        setArrayOfDice(prevArrayOfDice =>(
+            prevArrayOfDice.map(die =>(
+                (die.selected)
+                ? die
+                :{
+                    id: die.id,
+                    selected: die.selected,
+                    value: generateRandomNumber().toString()
+                 }
+            ))
+        ))
+        removeAllWrongDieStyling()
     }
 
     const removeAllWrongDieStyling = () =>{
@@ -108,14 +100,13 @@ function App() {
     const toggleClickedValue = (dieId) =>{
         setArrayOfDice(prevArrayOfDice=>(
             prevArrayOfDice.map(die =>(
-                (die.id === dieId) 
-                    ? 
-                        {
-                            id: die.id,
-                            selected : !die.selected,
-                            value : die.value
-                        } 
-                    : die
+                (die.id !== dieId) 
+                    ? die
+                    :{
+                        id: die.id,
+                        selected : !die.selected,
+                        value : die.value
+                     } 
             ))
         ))
     }
