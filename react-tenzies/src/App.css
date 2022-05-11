@@ -1,27 +1,46 @@
 body{
-    margin: 0;
-    background-color: cornflowerblue;
+    background-color: blue;
     padding: 2rem;
+
 }
 
-.tenzies-container{
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: aliceblue;
+    border-radius: 10px;
+    height: 30rem;
+}
+
+.tenzies{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    height: 30rem;
-    border-radius: 15px;
-    gap: 1rem;
 }
 
-.row{
-    display: flex;
-    gap: 1rem;
+.tenzies-container{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+    margin-bottom: 1rem;
 }
 
 .die-container{
-    padding: .7rem 1rem;
-    border-radius: 15px;
-    box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);
+    padding: .7rem;
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,.2);
+    border-radius: 10px;
+}
+
+.die-container:hover{
+    cursor: pointer;
+}
+
+.selected-wrong{
+    background-color: red;
+}
+
+.selected-correct{
+    background-color: green;
 }

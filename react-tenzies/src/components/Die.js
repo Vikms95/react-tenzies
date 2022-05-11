@@ -1,10 +1,11 @@
 import React from "react";
-function App(props) {
-  return (
-    <div className="die-container">
-        {props.value}
-    </div>
-  );
+function Die(props) {
+
+    return (
+        <div className="die-container" onClick={props.checkIfSelectedNumber}>
+            {props.value}
+        </div>
+    );
 }
 
-export default App;
+export default Die;
