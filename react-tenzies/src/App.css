@@ -1,0 +1,27 @@
+body{
+    margin: 0;
+    background-color: cornflowerblue;
+    padding: 2rem;
+}
+
+.tenzies-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    height: 30rem;
+    border-radius: 15px;
+    gap: 1rem;
+}
+
+.row{
+    display: flex;
+    gap: 1rem;
+}
+
+.die-container{
+    padding: .7rem 1rem;
+    border-radius: 15px;
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);
+}
