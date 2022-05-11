@@ -55,7 +55,7 @@ function App() {
             const length = prevArrayOfDice.length
             for(let i = 0 ; i < length; i++){
                 const die = prevArrayOfDice[i]
-                if(die.selected === true){
+                if(die.selected){
                     newArray.push(die)
                 }else if(die.selected === false){
                     newArray.push(
@@ -86,50 +86,50 @@ function App() {
     */
     const checkIfSelectedNumber = (dieId, event) =>{
         const element = event.target
-        if(selected === ""){
+
+        if(!selected){
             setSelected(element.textContent)
-            element.classList.add('selected-correct')
-            getNewArrayWithClickedDieToggled(dieId)
+            styleCorrectClick(element)
+            toggleClickedValue(dieId)
             return
         }
 
         if(element.textContent !== selected){
-            element.classList.add('selected-wrong')
+            styleIncorrectClick(element)
             return
         }
 
-        element.classList.add('selected-correct')
-        getNewArrayWithClickedDieToggled(dieId)
+        styleCorrectClick(element)
+        toggleClickedValue(dieId)
         
-        if(isWin()){
-            console.log("you won")
-        }
+        if(isWin()) console.log("WIN")
     }
 
-    const getNewArrayWithClickedDieToggled = (dieId) =>{
-        setArrayOfDice(prevArrayOfDice=>{
-            let newArray = []
-            const length = prevArrayOfDice.length
-            for(let i = 0 ; i < length; i++){
-                const die = prevArrayOfDice[i]
-                if(die.id !== dieId){
-                    newArray.push(die)
-                }else if(die.id === dieId){
-                    newArray.push(
+    const toggleClickedValue = (dieId) =>{
+        setArrayOfDice(prevArrayOfDice=>(
+            prevArrayOfDice.map(die =>(
+                (die.id === dieId) 
+                    ? 
                         {
-                            id: die.id, 
-                            selected: !die.selected, 
-                            value: die.value
-                        }
-                    )
-                }
-            }
-            return newArray
-        })
+                            id: die.id,
+                            selected : !die.selected,
+                            value : die.value
+                        } 
+                    : die
+            ))
+        ))
     }
 
     const isWin = () =>{
         return arrayOfDies.every(die => die.selected)
+    }
+
+    const styleCorrectClick = (element) =>{
+        element.classList.add('selected-correct')
+    }
+
+    const styleIncorrectClick = (element) =>{
+        element.classList.add('selected-wrong')
     }
 
   return (
