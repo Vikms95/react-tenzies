@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Die from './components/Die'
+import uniqid from 'uniqid'
 
 function App() {
     /*
@@ -13,15 +14,11 @@ function App() {
     } 
 
     /* 
-    Array of 10 objects, which will be:
-    selected : true/false - whether the value has been selected 
-    and matched *selected* when clicked
-    value: "" - the value assigned from generateRandomNumber() 
-    which will be compared in checkIfSelectedNumber()
+    Creates array of 10 objects
     */
     const [arrayOfDies, setArrayOfDice] = React.useState(
         new Array(10).fill(null).map(() =>(
-            ({selected: false, value: generateRandomNumber().toString()})
+            ({id: uniqid(), selected: false, value: generateRandomNumber().toString()})
         )))
     
     /*
@@ -38,6 +35,9 @@ function App() {
     const renderArrayOfDie = (array) =>{
         return array.map(die =>(
             <Die
+                key={die.id}
+                id={die.id}
+                selected={die.selected}
                 value={die.value}
                 checkIfSelectedNumber={checkIfSelectedNumber}
             />
@@ -45,78 +45,96 @@ function App() {
     } 
 
     /*
-    Invoked:
-        - Roll button is clicked
     Iterates over the previous *array* and if
     the array index has false as *selected*, generate
     a new *value* with generateRandomNumber()
     */
     const generateNewArrayOfDice = () =>{
-        // Call setArrayOfDice with prevArrayOfDice
         setArrayOfDice(prevArrayOfDice =>{
-            // Create *newArray*
             let newArray = []
             const length = prevArrayOfDice.length
-            // Iterate over *prevArrayOfDice*
             for(let i = 0 ; i < length; i++){
                 const die = prevArrayOfDice[i]
-                // If *prevArrayOfDice[i].selected* === true
                 if(die.selected === true){
                     newArray.push(die)
-                // Else if *prevArrayOfDice[i].selected* === false
                 }else if(die.selected === false){
-                    newArray.push({selected: die.selected, value: generateRandomNumber().toString()})
+                    newArray.push(
+                        {
+                            id: die.id, 
+                            selected: die.selected, 
+                            value: generateRandomNumber().toString()
+                        }
+                    )
                 }
             }
             removeAllWrongDieStyling()
-            // Return *newArray*
             return newArray
         })
     }
 
     const removeAllWrongDieStyling = () =>{
         const wrongDice = Array.from(document.querySelectorAll('.selected-wrong'))
-        console.log(wrongDice)
         wrongDice.forEach(die =>{
             die.classList.remove('selected-wrong')
         })
     }
-
 
     /*
     Invoked when a dice is clicked, if that button is the
     first one selected, it will display that button as green and
     assign the button textContent to the selected value
     */
-    const checkIfSelectedNumber = (event) =>{
-        // assign *element* to *event.target*
+    const checkIfSelectedNumber = (dieId, event) =>{
         const element = event.target
-        console.log(selected)
-        // if *element.textContent* === ""
         if(selected === ""){
-            // assign the event.target.textContent to  *selected*
             setSelected(element.textContent)
-            // add className selected-correct *event.target.classList*
             element.classList.add('selected-correct')
-            // return
+            getNewArrayWithClickedDieToggled(dieId)
             return
         }
 
-        // if *element.textContent* is not equals to *selected*
         if(element.textContent !== selected){
-            // add className selected-wrong to *event.target.classList*
             element.classList.add('selected-wrong')
-            // return
             return
         }
+
         element.classList.add('selected-correct')
-        // else
-            // add className selected-correct *event.target.classList*
-            // 
+        getNewArrayWithClickedDieToggled(dieId)
+        
+        if(isWin()){
+            console.log("you won")
+        }
+    }
+
+    const getNewArrayWithClickedDieToggled = (dieId) =>{
+        setArrayOfDice(prevArrayOfDice=>{
+            let newArray = []
+            const length = prevArrayOfDice.length
+            for(let i = 0 ; i < length; i++){
+                const die = prevArrayOfDice[i]
+                if(die.id !== dieId){
+                    newArray.push(die)
+                }else if(die.id === dieId){
+                    newArray.push(
+                        {
+                            id: die.id, 
+                            selected: !die.selected, 
+                            value: die.value
+                        }
+                    )
+                }
+            }
+            return newArray
+        })
+    }
+
+    const isWin = () =>{
+        return arrayOfDies.every(die => die.selected)
     }
 
   return (
     <main>
+        <div className='congratulating-message'></div>
         <div className="tenzies">
             <div className="tenzies-container">
                 {renderArrayOfDie(arrayOfDies)}
